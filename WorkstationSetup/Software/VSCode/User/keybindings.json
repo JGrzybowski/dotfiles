@@ -1,0 +1,26 @@
+// Place your key bindings in this file to overwrite the defaults
+[{
+        "key": "ctrl+alt+p",
+        "command": "latex-workshop.synctex",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+alt+s",
+        "command": "-latex-workshop.synctex",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+alt+oem_3",
+        "command": "latex-workshop.actions",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+alt+l",
+        "command": "-latex-workshop.actions",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+alt+oem_3",
+        "command": "workbench.action.tasks.terminate"
+    }
+]

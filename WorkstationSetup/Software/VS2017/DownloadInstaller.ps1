@@ -1,0 +1,1 @@
+Invoke-WebRequest https://aka.ms/vs/15/release/vs_community.exe -OutFile vs_Community.exe

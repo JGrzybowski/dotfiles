@@ -1,0 +1,13 @@
+.\vs_Community.exe --lang en-US ^
+--add Microsoft.VisualStudio.Component.Git ^
+--add Microsoft.VisualStudio.Workload.Azure ^
+--add Microsoft.VisualStudio.Workload.Data
+--add Microsoft.VisualStudio.Workload.NetCrossPlat ^
+--add Microsoft.VisualStudio.Component.R.Open ^
+--add Microsoft.VisualStudio.Component.RHost ^
+--add Microsoft.VisualStudio.Component.RTools ^
+--add Microsoft.VisualStudio.Workload.Universal ^
+--add Microsoft.VisualStudio.Workload.NetWeb ^
+--add Microsoft.VisualStudio.Workload.ManagedDesktop ^
+--add Component.GitHub.VisualStudio ^
+--includeRecommended --passive --norestart --wait
