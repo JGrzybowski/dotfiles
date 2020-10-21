@@ -19,6 +19,3 @@ cinst yarn -Y
 cinst openjdk -Y 
 
 # TODO: Run VS2017 scipts
-
-
-# TODO Run scripts from VSCODE
