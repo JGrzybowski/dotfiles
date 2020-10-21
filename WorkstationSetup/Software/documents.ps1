@@ -1,4 +1,5 @@
 # Reading Ebooks editing PDFs
+cinst adobereader -Y
 cinst pdftk -Y
 cinst calibre -Y
-# TODO: LaTeX??
+cinst naps2 -Y

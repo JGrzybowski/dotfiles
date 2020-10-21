@@ -1,9 +1,0 @@
-donjayamanne.githistory 
-eamodio.gitlens 
-James-Yu.latex-workshop 
-johnpapa.Angular2 
-lonefy.vscode-JS-CSS-HTML-formatter 
-mohsen1.prettify-json 
-ms-vscode.csharp 
-robertohuertasm.vscode-icons 
-wmaurer.change-case 
