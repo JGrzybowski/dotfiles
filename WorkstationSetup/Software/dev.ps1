@@ -11,6 +11,13 @@ cinst python3 -Y
 cinst r.project -Y
 cinst r.studio -Y
 
+# Node.js development
+cinst nodejs -Y
+cinst yarn -Y
+
+# Java environment
+cinst openjdk -Y 
+
 # TODO: Run VS2017 scipts
 
 

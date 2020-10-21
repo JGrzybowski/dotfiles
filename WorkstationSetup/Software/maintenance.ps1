@@ -8,3 +8,5 @@ cinst windirstat -Y
 cinst ccleaner -Y
 cinst defraggler -Y
 cinst crystaldiskinfo -Y
+
+cinst teamviewer -Y
