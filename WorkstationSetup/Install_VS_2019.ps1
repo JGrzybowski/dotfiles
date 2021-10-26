@@ -1,4 +1,6 @@
-Invoke-WebRequest https://aka.ms/vs/16/release/vs_Community.exe -OutFile vs_Community.exe
+$vsEdition = "Community"
+#$vsEdition = "Enterprise"
+Invoke-WebRequest "https://aka.ms/vs/16/release/vs_$vsEdition.exe" -OutFile vs_Installer.exe
 
 $workloads = `
     "Microsoft.VisualStudio.Workload.CoreEditor", #Visual Studio core editor (included with Visual Studio Community 2019) `
@@ -26,6 +28,6 @@ $workloads = `
 $workloadArgs = $workloads | ForEach-Object { "--add $_" }
 $workloadArgs = $workloadArgs -join " "
 
-$command = " & .\vs_Community.exe --lang en-US $workloadArgs --includeRecommended --passive --norestart --wait"
+$command = " & .\vs_Installer.exe --lang en-US $workloadArgs --includeRecommended --passive --norestart --wait"
 
 Invoke-Expression $command

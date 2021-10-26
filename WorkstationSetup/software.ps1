@@ -2,23 +2,37 @@
 cinst slack -Y
 choco pin add -n=slack
 cinst skype -Y
+cinst obs-studio -Y
+
+# Git
+cinst git -Y
+cinst git-lfs.install -Y
+cinst gh -Y
+
+# Terminal customization
+cinst poshgit -Y 
+cinst oh-my-posh -Y
+cinst jetbrainsmononf -Y
+cinst terminal-icons.powershell -Y
+cinst psake -Y
 
 # General software development
-cinst poshgit -Y 
+cinst logexpert -Y
 
 # Software for C#/.Net development
 cinst jetbrainstoolbox -Y
 choco pin add -n=jetbrainstoolbox
+cinst azure-cli -Y
+cinst azure-data-studio -Y
+choco pin add -n=azure-data-studio
 
 # Data analysis/visualization software
-cinst python2 -Y
 cinst python3 -Y
 cinst r.project -Y
 cinst r.studio -Y
 
 # Node.js development
 cinst nodejs -Y
-cinst yarn -Y
 
 # Java environment
 cinst openjdk -Y 
@@ -37,10 +51,12 @@ cinst paint.net -Y
 
 # 3D graphics editors and viewers
 cinst blender -Y
+cinst openscad -Y
 
 # 3D printing
 cinst cura-new -Y
 cinst meshmixer -Y
+cinst prusaslicer -Y
 
 # Hardware monitoring (temperatures, frequencies, device identification)
 cinst hwinfo -Y
@@ -56,7 +72,7 @@ cinst crystaldiskinfo -Y
 cinst teamviewer -Y
 # Must have everyday tools
 cinst notepadplusplus.install -Y
-cinst f.lux -Y
+#cinst f.lux -Y
 cinst 7zip.install -Y
 cinst keepass.install -Y
 cinst keepass-plugin-keepassnatmsg -Y
