@@ -74,7 +74,15 @@ cinst notepadplusplus.install -Y
 cinst 7zip.install -Y
 cinst keepass.install -Y
 cinst keepass-plugin-keepassnatmsg -Y
+# Audio tools
 cinst eartrumpet -Y
+cinst equalizerapo -Y
+
+# Peace setup WIP
+Invoke-WebRequest `
+    -Uri "https://sourceforge.net/projects/peace-equalizer-apo-extension/files/PeaceSetup.exe/download" `
+    -OutFile "$PSScriptRoot/temp/PeaceSetup.exe"
+Invoke-Expression "$PSScriptRoot/temp/PeaceSetup.exe"
 
 # Useful tools but not everyday use ones
 cinst winscp.install -Y
