@@ -75,6 +75,8 @@ cinst notepadplusplus.install -Y
 cinst 7zip.install -Y
 cinst keepass.install -Y
 cinst keepass-plugin-keepassnatmsg -Y
+cinst keepass-plugin-keepassotp -Y
+
 # Audio tools
 cinst eartrumpet -Y
 cinst equalizerapo -Y
