@@ -65,14 +65,12 @@ cinst gpu-z -Y
 
 # Mainly drive cleaning and usage tools
 cinst windirstat -Y
-cinst ccleaner -Y
-cinst defraggler -Y
 cinst crystaldiskinfo -Y
 
 cinst teamviewer -Y
+
 # Must have everyday tools
 cinst notepadplusplus.install -Y
-#cinst f.lux -Y
 cinst 7zip.install -Y
 cinst keepass.install -Y
 cinst keepass-plugin-keepassnatmsg -Y
