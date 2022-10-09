@@ -10,6 +10,7 @@ cinst git-lfs.install -Y
 cinst gh -Y
 
 # Terminal customization
+cinst nerd-fonts-cascadiacode -Y
 cinst poshgit -Y 
 cinst oh-my-posh -Y
 cinst jetbrainsmononf -Y
@@ -36,6 +37,13 @@ cinst nodejs -Y
 
 # Java environment
 cinst openjdk -Y 
+
+# Docker and Kubernetes
+cinst kubernetes-cli -Y
+cinst kubernetes-helm -Y
+cinst kustomize -Y
+cinst flux -Y
+cinst Minikube -Y
 
 # Reading Ebooks editing PDFs
 cinst adobereader -Y
@@ -65,18 +73,26 @@ cinst gpu-z -Y
 
 # Mainly drive cleaning and usage tools
 cinst windirstat -Y
-cinst ccleaner -Y
-cinst defraggler -Y
 cinst crystaldiskinfo -Y
 
 cinst teamviewer -Y
+
 # Must have everyday tools
 cinst notepadplusplus.install -Y
-#cinst f.lux -Y
 cinst 7zip.install -Y
 cinst keepass.install -Y
 cinst keepass-plugin-keepassnatmsg -Y
+cinst keepass-plugin-keepassotp -Y
+
+# Audio tools
 cinst eartrumpet -Y
+cinst equalizerapo -Y
+
+# Peace setup WIP
+Invoke-WebRequest `
+    -Uri "https://sourceforge.net/projects/peace-equalizer-apo-extension/files/PeaceSetup.exe/download" `
+    -OutFile "$PSScriptRoot/temp/PeaceSetup.exe"
+Invoke-Expression "$PSScriptRoot/temp/PeaceSetup.exe"
 
 # Useful tools but not everyday use ones
 cinst winscp.install -Y
