@@ -10,6 +10,7 @@ cinst git-lfs.install -Y
 cinst gh -Y
 
 # Terminal customization
+cinst nerd-fonts-cascadiacode -Y
 cinst poshgit -Y 
 cinst oh-my-posh -Y
 cinst jetbrainsmononf -Y
