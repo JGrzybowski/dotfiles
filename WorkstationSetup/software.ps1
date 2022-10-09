@@ -38,6 +38,13 @@ cinst nodejs -Y
 # Java environment
 cinst openjdk -Y 
 
+# Docker and Kubernetes
+cinst kubernetes-cli -Y
+cinst kubernetes-helm -Y
+cinst kustomize -Y
+cinst flux -Y
+cinst Minikube -Y
+
 # Reading Ebooks editing PDFs
 cinst adobereader -Y
 cinst pdftk -Y
