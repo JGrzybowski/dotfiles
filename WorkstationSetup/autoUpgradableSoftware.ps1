@@ -1,16 +1,17 @@
-$softwareList = `
-  "chrome", `
-  "operaChromium", `
-  "vscode", `
-  "spotify", `
-  "steam", `
-  "discord", `
+﻿$softwareList = @(
+  "chrome",
+  "operaChromium",
+  "vscode",
+  "spotify",
+  "steam",
+  "discord",
   "zoom"
+)
 
 $softwareList = $softwareList -join "-"
 
 $url = "https://ninite.com/$softwareList/ninite.exe"
-$exeInstalerFilePath = "$PSScriptRoot/temp/InstallAutoUpgradableSoftware.exe"
+$exeInstallerFilePath = "$PSScriptRoot/temp/InstallAutoUpgradableSoftware.exe"
 $path = "$PSScriptRoot/temp"
 
 If (!(test-path $path)) {
@@ -18,8 +19,8 @@ If (!(test-path $path)) {
 }
 
 "Downloading the Ninite installer"
-Invoke-WebRequest -Uri $url -OutFile $exeInstalerFilePath
+Invoke-WebRequest -Uri $url -OutFile $exeInstallerFilePath
 "Download finished"
 "I will install software"
-Start-Process -Filepath $exeInstalerFilePath
+Start-Process -Filepath $exeInstallerFilePath
 "Installation Finished!"
