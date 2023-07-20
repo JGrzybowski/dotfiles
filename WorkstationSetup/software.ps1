@@ -72,7 +72,7 @@ cinst cpu-z.portable -Y
 cinst gpu-z -Y
 
 # Mainly drive cleaning and usage tools
-cinst windirstat -Y
+cinst wiztree -Y
 cinst crystaldiskinfo -Y
 
 cinst teamviewer -Y
