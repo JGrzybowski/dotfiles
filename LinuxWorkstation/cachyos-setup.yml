@@ -1,0 +1,142 @@
+---
+- name: CachyOS Workstation Setup
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: 1. Update system and package database
+      become: true
+      community.general.pacman:
+        update_cache: true
+        upgrade: true
+
+    - name: 2. Official repository packages (Native)
+      become: true
+      community.general.pacman:
+        state: present
+        name:
+          # --- Dev, Git & Terminal ---
+          - git
+          - git-lfs
+          - github-cli
+          - dotnet-sdk
+          - python
+          # - r                      # Temporarily disabled
+          # - jdk-openjdk            # Temporarily disabled
+          # - nodejs                 # Removed (Handled by NVM)
+          # - npm                    # Removed (Handled by NVM)
+          - zsh-autosuggestions
+          - zsh-syntax-highlighting
+          - starship
+          - eza
+          - fzf
+          - just
+          - ttf-cascadia-code-nerd
+          - ttf-jetbrains-mono-nerd
+          
+          # --- Kubernetes & Containers ---
+          - docker
+          - docker-compose
+          # - kubectl                # Temporarily disabled
+          # - helm                   # Temporarily disabled
+          # - kustomize              # Temporarily disabled
+          # - minikube               # Temporarily disabled
+          
+          # --- Daily Apps & Graphics ---
+          - discord
+          - obs-studio
+          - okular
+          - qimgv
+          - inkscape
+          - pinta
+          - blender
+          - openscad
+          - cura
+          - prusa-slicer
+          - kate
+          - p7zip
+          - keepassxc
+          - meld
+          - doublecmd-qt6
+          - vlc
+          - easyeffects
+          - steam
+          
+          # --- Diagnostics ---
+          - cpu-x
+          - mangohud
+          - nvtop
+          - qdirstat
+          - smartmontools
+
+    - name: 3. AUR packages (Commercial and specific)
+      kewlfft.aur.aur:
+        state: present
+        name:
+          # - slack-desktop          # Temporarily disabled
+          - zoom
+          - klogg-bin
+          - jetbrains-toolbox
+          - visual-studio-code-bin
+          - powershell-bin
+          - naps2
+          - pdftk
+          - teamviewer
+          - notepadqq
+          - onlyoffice-bin
+          - onedrivegui-bin
+          - google-chrome
+          - spotify
+          - zen-browser-bin          # Replaced Opera
+          - nvm                      # Node Version Manager
+
+    - name: 4. Enable background services
+      become: true
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+      loop:
+        - docker
+        - teamviewerd
+
+    - name: 5. Grant Docker permissions without 'sudo'
+      become: true
+      ansible.builtin.user:
+        name: "{{ ansible_user_id }}"
+        groups: docker
+        append: true
+
+    - name: 6. Terminal configuration (Aliases, NVM and Starship in ~/.zshrc)
+      ansible.builtin.blockinfile:
+        path: ~/.zshrc
+        create: true
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - TERMINAL"
+        block: |
+          alias ls='eza --icons --group-directories-first'
+          alias ll='eza --icons --group-directories-first -l'
+          source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+          source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+          source /usr/share/nvm/init-nvm.sh
+          eval "$(starship init zsh)"
+
+    - name: 7. Install Node.js LTS via NVM
+      ansible.builtin.shell: |
+        source /usr/share/nvm/init-nvm.sh
+        nvm install --lts
+        nvm alias default 'lts/*'
+      args:
+        executable: /bin/bash
+      register: nvm_output
+      changed_when: "'is already installed' not in nvm_output.stdout"
+
+    - name: 8. Prepare AutoEQ folder (EasyEffects)
+      ansible.builtin.file:
+        path: ~/.config/easyeffects/irs
+        state: directory
+        mode: '0755'
+
+    # - name: 9. Download AutoEQ profile for headphones
+    #   ansible.builtin.get_url:
+    #     url: "https://raw.githubusercontent.com/jaakkopasanen/AutoEq/master/results/oratory1990/harman_over-ear_2018/Sennheiser%20HD%20600/Sennheiser%20HD%20600%20minimum%20phase%2048000Hz.wav"
+    #     dest: ~/.config/easyeffects/irs/My_Headphones_AutoEQ.wav

@@ -1,0 +1,104 @@
+---
+- name: Windows Workstation Setup (via Winget)
+  hosts: all
+  gather_facts: false
+  
+  tasks:
+    - name: 1. Install communication software
+      community.windows.win_winget:
+        name:
+          # - SlackTechnologies.Slack
+          - OBSProject.OBSStudio
+          - Discord.Discord
+          - Zoom.Zoom
+        state: present
+        source: winget
+        arguments: "--accept-package-agreements --accept-source-agreements"
+
+    - name: 2. Install developer tools and Git
+      community.windows.win_winget:
+        name:
+          - Git.Git
+          - GitHub.cli
+          - Microsoft.VisualStudioCode
+          - JetBrains.Toolbox
+          - Microsoft.AzureCLI
+          - CoreyButler.NVMforWindows # Replaces Node.js directly
+          - Python.Python.3.11
+          # - RProject.R
+          # - Posit.RStudio
+          # - Microsoft.OpenJDK.17
+        state: present
+        arguments: "--accept-package-agreements --accept-source-agreements"
+
+    # - name: 3. Kubernetes and Cloud environment
+    #   community.windows.win_winget:
+    #     name:
+    #       - Kubernetes.kubectl
+    #       - Helm.Helm
+    #       - Kubernetes.minikube
+    #     state: present
+    #     arguments: "--accept-package-agreements --accept-source-agreements"
+
+    - name: 3. Install Node.js LTS via NVM for Windows
+      ansible.windows.win_shell: |
+        nvm install lts
+        nvm use lts
+
+    - name: 4. Daily applications and PowerTools
+      community.windows.win_winget:
+        name:
+          - Microsoft.PowerToys
+          - Notepad++.Notepad++
+          - 7zip.7zip
+          - KeePassXCTeam.KeePassXC
+          - WinMerge.WinMerge
+          - WinSCP.WinSCP
+          - doublecmd.doublecmd
+          - IrfanSkiljan.IrfanView
+          - Gyan.FFmpeg 
+        state: present
+        arguments: "--accept-package-agreements --accept-source-agreements"
+
+    - name: 5. Graphics software and 3D printing
+      community.windows.win_winget:
+        name:
+          - Inkscape.Inkscape
+          - dotPDNLLC.paintdotnet
+          - BlenderFoundation.Blender
+          - OpenSCAD.OpenSCAD
+          - Ultimaker.Cura
+          - PrusaResearch.PrusaSlicer
+        state: present
+        arguments: "--accept-package-agreements --accept-source-agreements"
+
+    - name: 6. Diagnostics and Utilities
+      community.windows.win_winget:
+        name:
+          - REALiX.HWiNFO
+          - CPUID.CPU-Z
+          - TechPowerUp.GPU-Z
+          - AntibodySoftware.WizTree
+          - CrystalDewWorld.CrystalDiskInfo
+          - TeamViewer.TeamViewer
+        state: present
+        arguments: "--accept-package-agreements --accept-source-agreements"
+
+    - name: 7. Browsers and Multimedia
+      community.windows.win_winget:
+        name:
+          - Google.Chrome
+          - Spotify.Spotify
+          - Valve.Steam
+          - VideoLAN.VLC
+          - ZenBrowser.Zen # Replaces Opera
+        state: present
+        arguments: "--accept-package-agreements --accept-source-agreements"
+
+    - name: 8. PowerShell configuration (Modules)
+      ansible.windows.win_shell: |
+        Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+        Install-Module -Name posh-git -Force
+        Install-Module -Name oh-my-posh -Force
+        Install-Module -Name Terminal-Icons -Force
+        Install-Module -Name psake -Force
