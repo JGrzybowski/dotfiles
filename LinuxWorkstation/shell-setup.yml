@@ -1,0 +1,28 @@
+---
+- name: Shell and Terminal Environment (Zsh & Starship)
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: 1. Install Zsh enhancements, Starship, and CLI utilities via Pacman
+      become: true
+      community.general.pacman:
+        state: present
+        name:
+          - zsh-autosuggestions
+          - zsh-syntax-highlighting
+          - starship
+          - eza
+          - fzf
+
+    - name: 2. Configure ~/.zshrc (Aliases, Plugins, Starship prompt)
+      ansible.builtin.blockinfile:
+        path: ~/.zshrc
+        create: true
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - TERMINAL"
+        block: |
+          alias ls='eza --icons --group-directories-first'
+          alias ll='eza --icons --group-directories-first -l'
+          source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+          source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+          eval "$(starship init zsh)"

@@ -1,0 +1,153 @@
+---
+# ==============================================================================
+# Workstation Package Catalog (Categorized by Domain)
+# Edit this file to add, remove, or toggle software on your workstation.
+# ==============================================================================
+
+packages:
+  # ============================================================================
+  # 1. General Development & Engineering
+  # ============================================================================
+  dev_generic:
+    native:
+      - git
+      - git-lfs
+      - github-cli
+      - python
+      - just                    # Modern command/task runner (handy replacement for makefiles)
+      - ttf-cascadia-code-nerd  # Microsoft Cascadia Code font patched with Nerd Font developer icons
+      - ttf-jetbrains-mono-nerd # JetBrains Mono font patched with Nerd Font developer icons
+      # --- Temporarily disabled runtimes ---
+      # - r                      # Temporarily disabled: R programming language for statistics & data science
+      # - jdk-openjdk            # Temporarily disabled: OpenJDK Java Development Kit (runtime & javac compiler)
+    aur:
+      - antigravity-ide
+      - visual-studio-code-bin
+      - jetbrains-toolbox       # JetBrains IDE updater and project manager
+      - klogg-bin               # Ultra-fast, high-performance GUI log file viewer with regex search
+      - powershell-bin          # Microsoft PowerShell 7 cross-platform shell
+
+  # ============================================================================
+  # 2. .NET & Cloud Development
+  # ============================================================================
+  dev_dotnet:
+    native:
+      - dotnet-sdk              # Official .NET SDK runtime & build tools
+      - azure-cli               # Microsoft Azure cloud command-line interface (`az`)
+    aur: []
+
+  # ============================================================================
+  # 3. JavaScript & Web Development
+  # ============================================================================
+  dev_js:
+    native:
+      # --- Node.js ecosystem (Disabled here because it is handled by NVM in nvm-setup.yml) ---
+      # - nodejs                 # Disabled: Official Node.js JavaScript runtime (NVM handles this in user-space)
+      # - npm                    # Disabled: Node Package Manager (NVM bundles and installs this per Node version)
+    aur: []
+
+  # ============================================================================
+  # 4. Containers & Kubernetes Development
+  # ============================================================================
+  dev_container:
+    native:
+      # (Note: Core Docker engine & compose daemon are managed by docker-setup.yml)
+      - kubectl                # Temporarily disabled: Kubernetes command-line cluster management tool
+      - helm                   # Temporarily disabled: Kubernetes package & Helm chart manager
+      - kustomize              # Temporarily disabled: Template-free customization of Kubernetes YAML manifests
+      - minikube               # Temporarily disabled: Local single-node Kubernetes cluster for testing
+    aur: []
+
+  # ============================================================================
+  # 5. 3D Printing & CAD
+  # ============================================================================
+  creative_3d:
+    native:
+      - blender                 # 3D modeling, sculpting, and animation suite
+      - openscad                # Script-only, programmatic parametric 3D CAD modeler
+      - prusa-slicer            # 3D printing slicer (converts 3D models into printer G-code)
+    aur:
+      - cura-bin                # Ultimaker Cura 3D printer slicing software
+
+  # ============================================================================
+  # 6. Graphics & Visual Design
+  # ============================================================================
+  graphics:
+    native:
+      - inkscape                # Professional vector graphics editor (SVG)
+      - pinta                   # Simple drawing & image editing tool (Linux alternative to Paint.NET)
+    aur: []
+
+  # ============================================================================
+  # 7. Media & Audio/Video
+  # ============================================================================
+  media:
+    native:
+      - vlc                     # Universal media and video player
+      - obs-studio              # Screen recording and live streaming software
+    aur:
+      - spotify-launcher        # Spotify official music client installer
+      - qimgv                   # Fast, keyboard-driven image viewer with animated/video support
+
+  # ============================================================================
+  # 8. Games & Gaming Platforms
+  # ============================================================================
+  games:
+    native:
+      - steam                   # Valve's Steam gaming platform & runtime
+    aur: []
+
+  # ============================================================================
+  # 9. Daily Productivity & Office
+  # ============================================================================
+  productivity:
+    native:
+      # --- Communication ---
+      - discord
+
+      # --- Documents & PDFs ---
+      - okular                  # Universal document & PDF reader with annotation support
+
+      # --- Text & Notes ---
+      - kate                    # Feature-rich KDE text and code editor
+
+      # --- File Management & Archives ---
+      - doublecmd-qt6           # Dual-panel graphical file manager (Total Commander alternative)
+      - meld                    # Visual graphical diff and 3-way merge comparison tool
+      - p7zip                   # Command-line 7-Zip archive extraction and compression utility
+
+      # --- Security ---
+      - keepassxc               # Local, encrypted password manager
+
+    aur:
+      # --- Browsers ---
+      - zen-browser-bin         # Modern, privacy-focused Firefox-based browser
+      - google-chrome
+
+      # --- Communication ---
+      - signal-desktop          # Encrypted private messaging client
+      # - slack-desktop          # Temporarily disabled: Slack team collaboration & workspace messaging
+      # - zoom                   # Temporarily disabled: Zoom video conferencing & virtual meeting client
+
+      # --- Documents & PDFs ---
+      - onlyoffice-bin          # Microsoft Office compatible document, sheet, & slide suite
+      - naps2                   # "Not Another PDF Scanner 2" - GUI scanning utility with OCR
+      - pdftk                   # PDF Toolkit for merging, splitting, and manipulating PDF files
+
+      # --- Text & Notes ---
+      - notepadqq               # Notepad++ inspired text and source code editor for Linux
+
+      # --- Remote Access ---
+      - teamviewer              # Remote desktop support and screen sharing tool
+
+  # ============================================================================
+  # 10. Hardware & System Diagnostics
+  # ============================================================================
+  diagnostics:
+    native:
+      - cpu-x                   # Hardware information & CPU specs viewer (CPU-Z alternative for Linux)
+      - mangohud                # Vulkan & OpenGL gaming HUD overlay for monitoring FPS, temps, & load
+      - nvtop                   # Interactive GPU process & resource monitor (like `htop` for GPUs)
+      - smartmontools           # S.M.A.R.T. storage drive health inspection & monitoring (`smartctl`)
+    aur:
+      - qdirstat                # Qt-based visual disk usage analyzer (locates space-hogging files)

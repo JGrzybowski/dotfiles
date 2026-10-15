@@ -1,0 +1,36 @@
+---
+# ==============================================================================
+# CachyOS Workstation Master Orchestrator
+# Runs all modular setup playbooks in logical sequence.
+# Each playbook can also be executed independently.
+# ==============================================================================
+
+- name: 1. Core System Packages & Updates
+  import_playbook: packages.yml
+
+- name: 2. Shell & Terminal Environment (Zsh & Starship)
+  import_playbook: shell-setup.yml
+
+- name: 3. Node Version Manager & Node.js Runtime (NVM)
+  import_playbook: nvm-setup.yml
+
+- name: 4. Terminal Migration (Kitty)
+  import_playbook: kitty-terminal.yml
+
+- name: 5. Advanced File Browser (Yazi)
+  import_playbook: yazi-file-browser.yml
+
+- name: 6. Container Runtime (Docker)
+  import_playbook: docker-setup.yml
+
+- name: 7. Cloud Storage (OneDrive)
+  import_playbook: onedrive-setup.yml
+
+- name: 8. Printing, Scanning & Network Discovery (Avahi & CUPS)
+  import_playbook: printer-scanner-setup.yml
+
+- name: 9. Audio Calibration (EasyEffects)
+  import_playbook: audio-setup.yml
+
+- name: 10. Hardware & Storage (NTFS Drives)
+  import_playbook: ntfs-setup.yml

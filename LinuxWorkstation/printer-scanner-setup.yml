@@ -1,0 +1,41 @@
+---
+- name: Printing, Scanning, and Network Discovery (CUPS, SANE, Avahi)
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: 1. Install CUPS, SANE, and Avahi packages via Pacman
+      become: true
+      community.general.pacman:
+        state: present
+        name:
+          - cups                            # Main print server
+          - cups-pdf                        # Optional: virtual PDF printer
+          - avahi                           # Network discovery daemon (mDNS)
+          - nss-mdns                        # Plugin for resolving .local hostnames
+          - sane                            # Main scanner system
+          - sane-airscan                    # Driver for modern network scanners (eSCL/AirScan)
+
+    - name: 2. Install Epson printer drivers from AUR
+      kewlfft.aur.aur:
+        name: epson-inkjet-printer-escpr    # Official driver for Epson L-series
+        state: present
+
+    - name: 3. Enable and start background services (CUPS and Avahi)
+      become: true
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+      loop:
+        - cups
+        - avahi-daemon
+
+    - name: 4. Enable mDNS hostname resolution for network printers in /etc/nsswitch.conf
+      become: true
+      ansible.builtin.replace:
+        path: /etc/nsswitch.conf
+        # Finds the "hosts:" line and inserts "mdns_minimal [NOTFOUND=return]" before "resolve"
+        regexp: '^hosts:(?!.*mdns_minimal)(.*?)resolve(.*)'
+        replace: 'hosts:\1mdns_minimal [NOTFOUND=return] resolve\2'
+        backup: true

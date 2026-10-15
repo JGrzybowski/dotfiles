@@ -1,0 +1,23 @@
+---
+- name: Audio Equalization and Calibration (EasyEffects + AutoEQ)
+  hosts: localhost
+  connection: local
+  gather_facts: true
+
+  tasks:
+    - name: 1. Install EasyEffects via Pacman
+      become: true
+      community.general.pacman:
+        name: easyeffects
+        state: present
+
+    - name: 2. Prepare AutoEQ impulse response folder (EasyEffects)
+      ansible.builtin.file:
+        path: "{{ ansible_facts['user_dir'] }}/.config/easyeffects/irs"
+        state: directory
+        mode: '0755'
+
+    # - name: 3. Download AutoEQ profile for headphones (e.g., Sennheiser HD 600)
+    #   ansible.builtin.get_url:
+    #     url: "https://raw.githubusercontent.com/jaakkopasanen/AutoEq/master/results/oratory1990/harman_over-ear_2018/Sennheiser%20HD%20600/Sennheiser%20HD%20600%20minimum%20phase%2048000Hz.wav"
+    #     dest: "{{ ansible_facts['user_dir'] }}/.config/easyeffects/irs/My_Headphones_AutoEQ.wav"

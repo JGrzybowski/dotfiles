@@ -1,0 +1,71 @@
+---
+- name: Advanced File Browser Setup (Yazi + STL Preview + OneDrive Fix)
+  hosts: localhost
+  connection: local
+  gather_facts: true
+
+  vars:
+    # Adjust this path if your OneDrive is mounted elsewhere
+    onedrive_dir: "{{ ansible_facts['user_dir'] }}/OneDrive"
+
+  tasks:
+    - name: Install Yazi, F3D, Git, and XDG utilities via Pacman
+      become: true
+      community.general.pacman:
+        name:
+          - yazi
+          - f3d
+          - git
+          - xdg-utils
+        state: present
+
+    - name: Create Yazi configuration and plugin directories
+      ansible.builtin.file:
+        path: "{{ ansible_facts['user_dir'] }}/.config/yazi/plugins"
+        state: directory
+        mode: '0755'
+
+    - name: Download F3D Previewer plugin for Yazi STL rendering
+      ansible.builtin.git:
+        repo: 'https://github.com'
+        dest: "{{ ansible_facts['user_dir'] }}/.config/yazi/plugins/f3d-preview.yazi"
+        version: main
+        force: true
+
+    - name: Generate optimized yazi.toml configuration mapping
+      ansible.builtin.copy:
+        dest: "{{ ansible_facts['user_dir'] }}/.config/yazi/yazi.toml"
+        mode: '0644'
+        content: |
+          [plugin]
+          prepend_previewers = [
+              { url = "*.{3mf,obj,pts,ply,stl,step,stp}", run = "f3d-preview" }
+          ]
+          prepend_preloaders = [
+              { url = "*.{3mf,obj,pts,ply,stl,step,stp}", run = "f3d-preview" }
+          ]
+
+          # CRITICAL OPTIMIZATION: Stop Yazi from caching/downloading your entire OneDrive
+          [[plugin.prepend_preloaders]]
+          url = "{{ onedrive_dir }}/**"
+          run = "noop"
+
+    - name: Set Yazi as the default directory mime-handler
+      ansible.builtin.command: "xdg-mime default yazi.desktop inode/directory"
+      changed_when: false
+
+    - name: Detect active Niri configuration file layout
+      ansible.builtin.stat:
+        path: "{{ ansible_facts['user_dir'] }}/.config/niri/cfg/keybinds.kdl"
+      register: keybinds_file
+
+    - name: Route Niri configuration destination
+      ansible.builtin.set_fact:
+        niri_config_path: "{{ keybinds_file.stat.path if keybinds_file.stat.exists else ansible_facts['user_dir'] + '/.config/niri/config.kdl' }}"
+
+    - name: Route Niri File Manager shortcut to Kitty + Yazi
+      ansible.builtin.replace:
+        path: "{{ niri_config_path }}"
+        regexp: '(Mod\+E\s*\{\s*spawn\s*")[^"]+("\s*;\s*\})'
+        replace: '\1kitty" "yazi\2'
+      ignore_errors: true

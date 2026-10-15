@@ -1,0 +1,64 @@
+---
+- name: Core Terminal Migration (Kitty Setup)
+  hosts: localhost
+  connection: local
+  gather_facts: true
+
+  tasks:
+    - name: Install Kitty via Pacman
+      become: true
+      community.general.pacman:
+        name: kitty
+        state: present
+
+    - name: Create Kitty configuration directory
+      ansible.builtin.file:
+        path: "{{ ansible_facts['user_dir'] }}/.config/kitty"
+        state: directory
+        mode: '0755'
+
+    - name: Apply Tokyo Night Storm theme via native Kitty engine
+      ansible.builtin.command: "kitty +kitten themes --reload-in=all Tokyo Night Storm"
+      changed_when: true
+
+    - name: Append Niri Window Aesthetics to kitty.conf
+      ansible.builtin.blockinfile:
+        path: "{{ ansible_facts['user_dir'] }}/.config/kitty/kitty.conf"
+        marker: "# {mark} NIRI INTERACTION SETTINGS"
+        block: |
+          background_opacity 0.85
+          background_blur 1
+          confirm_os_window_close 0
+          scrollback_lines 10000
+          enable_audio_bell no
+
+    - name: Enforce Kitty in Shell Environments
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_facts['user_dir'] }}/{{ item }}"
+        line: "export TERMINAL=kitty"
+        create: true
+        mode: '0644'
+      loop:
+        - .bashrc
+        - .zshrc
+
+    - name: Update GSettings fallback terminal
+      ansible.builtin.command: "gsettings set org.gnome.desktop.default-applications.terminal exec 'kitty'"
+      changed_when: true
+      ignore_errors: true
+
+    - name: Detect active Niri configuration file layout
+      ansible.builtin.stat:
+        path: "{{ ansible_facts['user_dir'] }}/.config/niri/cfg/keybinds.kdl"
+      register: keybinds_file
+
+    - name: Route Niri configuration destination
+      ansible.builtin.set_fact:
+        niri_config_path: "{{ keybinds_file.stat.path if keybinds_file.stat.exists else ansible_facts['user_dir'] + '/.config/niri/config.kdl' }}"
+
+    - name: Route Niri Terminal shortcut to Kitty
+      ansible.builtin.replace:
+        path: "{{ niri_config_path }}"
+        regexp: '(Mod\+Return\s*\{\s*spawn\s*")[^"]+("\s*;\s*\})'
+        replace: '\1kitty\2'
+      ignore_errors: true

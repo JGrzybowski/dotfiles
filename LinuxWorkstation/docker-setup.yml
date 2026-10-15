@@ -1,0 +1,28 @@
+---
+- name: Container Runtime (Docker Setup)
+  hosts: localhost
+  connection: local
+  gather_facts: true
+
+  tasks:
+    - name: 1. Install Docker and Docker Compose via Pacman
+      become: true
+      community.general.pacman:
+        state: present
+        name:
+          - docker
+          - docker-compose
+
+    - name: 2. Enable and start Docker systemd service
+      become: true
+      ansible.builtin.systemd:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: 3. Grant user Docker permissions without 'sudo'
+      become: true
+      ansible.builtin.user:
+        name: "{{ ansible_facts['user_id'] }}"
+        groups: docker
+        append: true

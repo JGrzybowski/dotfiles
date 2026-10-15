@@ -1,0 +1,28 @@
+---
+- name: Node Version Manager and Node.js LTS Setup (NVM)
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: 1. Install NVM via Pacman
+      become: true
+      community.general.pacman:
+        name: nvm
+        state: present
+
+    - name: 2. Ensure NVM initialization is sourced in ~/.zshrc
+      ansible.builtin.lineinfile:
+        path: ~/.zshrc
+        line: "source /usr/share/nvm/init-nvm.sh"
+        create: true
+        mode: '0644'
+
+    - name: 3. Install Node.js LTS via NVM
+      ansible.builtin.shell: |
+        source /usr/share/nvm/init-nvm.sh
+        nvm install --lts
+        nvm alias default 'lts/*'
+      args:
+        executable: /bin/bash
+      register: nvm_output
+      changed_when: "'is already installed' not in nvm_output.stdout"

@@ -1,0 +1,27 @@
+---
+- name: Cloud Storage (OneDrive Setup via onedriver)
+  hosts: localhost
+  connection: local
+  gather_facts: true
+
+  tasks:
+    - name: 1. Install onedriver from AUR
+      kewlfft.aur.aur:
+        name: onedriver
+        state: present
+
+    - name: 2. Prepare folder for OneDrive (FUSE mount point)
+      ansible.builtin.file:
+        path: "{{ ansible_facts['user_dir'] }}/OneDrive"
+        state: directory
+        mode: '0755'
+
+    - name: 3. Enable onedriver systemd service (Autostart user service)
+      ansible.builtin.systemd:
+        # systemd requires escaping paths by replacing slashes with dashes
+        # e.g., /home/janek/OneDrive -> home-janek-OneDrive
+        name: "onedriver@home-{{ ansible_facts['user_id'] }}-OneDrive.service"
+        scope: user
+        enabled: true
+        state: started
+        daemon_reload: true

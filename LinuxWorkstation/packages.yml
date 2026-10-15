@@ -1,0 +1,195 @@
+---
+- name: General Workstation Packages by Domain
+  hosts: localhost
+  connection: local
+  vars_files:
+    - vars/packages.yml
+
+  tasks:
+    - name: Update system and package database
+      become: true
+      community.general.pacman:
+        update_cache: true
+        upgrade: true
+      register: pacupdate
+      tags: [always, update]
+
+    # --- 1. General Development ---
+    - name: General Development Packages
+      tags: [packages, dev, dev-generic]
+      block:
+        - name: Install Native General Dev Packages
+          become: true
+          community.general.pacman:
+            name: "{{ packages.dev_generic.native | default([]) }}"
+            state: present
+          when: (packages.dev_generic.native | default([])) | length > 0
+
+        - name: Install AUR General Dev Packages
+          kewlfft.aur.aur:
+            name: "{{ packages.dev_generic.aur | default([]) }}"
+            state: present
+          when: (packages.dev_generic.aur | default([])) | length > 0
+
+    # --- 2. .NET Development ---
+    - name: .NET Development Packages
+      tags: [packages, dev, dev-dotnet]
+      block:
+        - name: Install Native .NET Packages
+          become: true
+          community.general.pacman:
+            name: "{{ packages.dev_dotnet.native | default([]) }}"
+            state: present
+          when: (packages.dev_dotnet.native | default([])) | length > 0
+
+        - name: Install AUR .NET Packages
+          kewlfft.aur.aur:
+            name: "{{ packages.dev_dotnet.aur | default([]) }}"
+            state: present
+          when: (packages.dev_dotnet.aur | default([])) | length > 0
+
+    # --- 3. JavaScript Development ---
+    - name: JavaScript Development Packages
+      tags: [packages, dev, dev-js]
+      block:
+        - name: Install Native JS Packages
+          become: true
+          community.general.pacman:
+            name: "{{ packages.dev_js.native | default([]) }}"
+            state: present
+          when: (packages.dev_js.native | default([])) | length > 0
+
+        - name: Install AUR JS Packages
+          kewlfft.aur.aur:
+            name: "{{ packages.dev_js.aur | default([]) }}"
+            state: present
+          when: (packages.dev_js.aur | default([])) | length > 0
+
+    # --- 4. Kubernetes & Cloud-Native ---
+    - name: Kubernetes Development Packages
+      tags: [packages, dev, kubernetes, k8s]
+      block:
+        - name: Install Native Kubernetes Packages
+          become: true
+          community.general.pacman:
+            name: "{{ packages.kubernetes.native | default([]) }}"
+            state: present
+          when: (packages.kubernetes.native | default([])) | length > 0
+
+        - name: Install AUR Kubernetes Packages
+          kewlfft.aur.aur:
+            name: "{{ packages.kubernetes.aur | default([]) }}"
+            state: present
+          when: (packages.kubernetes.aur | default([])) | length > 0
+
+    # --- 5. 3D Printing & CAD ---
+    - name: 3D Printing & CAD Packages
+      tags: [packages, 3d]
+      block:
+        - name: Install Native 3D Packages
+          become: true
+          community.general.pacman:
+            name: "{{ packages.creative_3d.native | default([]) }}"
+            state: present
+          when: (packages.creative_3d.native | default([])) | length > 0
+
+        - name: Install AUR 3D Packages
+          kewlfft.aur.aur:
+            name: "{{ packages.creative_3d.aur | default([]) }}"
+            state: present
+          when: (packages.creative_3d.aur | default([])) | length > 0
+
+    # --- 6. Graphics & Visual Design ---
+    - name: Graphics Design Packages
+      tags: [packages, graphics]
+      block:
+        - name: Install Native Graphics Packages
+          become: true
+          community.general.pacman:
+            name: "{{ packages.graphics.native | default([]) }}"
+            state: present
+          when: (packages.graphics.native | default([])) | length > 0
+
+        - name: Install AUR Graphics Packages
+          kewlfft.aur.aur:
+            name: "{{ packages.graphics.aur | default([]) }}"
+            state: present
+          when: (packages.graphics.aur | default([])) | length > 0
+
+    # --- 7. Media & Audio/Video ---
+    - name: Media & Playback Packages
+      tags: [packages, media]
+      block:
+        - name: Install Native Media Packages
+          become: true
+          community.general.pacman:
+            name: "{{ packages.media.native | default([]) }}"
+            state: present
+          when: (packages.media.native | default([])) | length > 0
+
+        - name: Install AUR Media Packages
+          kewlfft.aur.aur:
+            name: "{{ packages.media.aur | default([]) }}"
+            state: present
+          when: (packages.media.aur | default([])) | length > 0
+
+    # --- 8. Games ---
+    - name: Gaming Packages
+      tags: [packages, games]
+      block:
+        - name: Install Native Gaming Packages
+          become: true
+          community.general.pacman:
+            name: "{{ packages.games.native | default([]) }}"
+            state: present
+          when: (packages.games.native | default([])) | length > 0
+
+        - name: Install AUR Gaming Packages
+          kewlfft.aur.aur:
+            name: "{{ packages.games.aur | default([]) }}"
+            state: present
+          when: (packages.games.aur | default([])) | length > 0
+
+    # --- 9. Daily Productivity & Office ---
+    - name: Productivity & Office Packages
+      tags: [packages, productivity]
+      block:
+        - name: Install Native Productivity Packages
+          become: true
+          community.general.pacman:
+            name: "{{ packages.productivity.native | default([]) }}"
+            state: present
+          when: (packages.productivity.native | default([])) | length > 0
+
+        - name: Install AUR Productivity Packages
+          kewlfft.aur.aur:
+            name: "{{ packages.productivity.aur | default([]) }}"
+            state: present
+          when: (packages.productivity.aur | default([])) | length > 0
+
+    # --- 10. Diagnostics ---
+    - name: Hardware & System Diagnostic Packages
+      tags: [packages, diagnostics]
+      block:
+        - name: Install Native Diagnostic Packages
+          become: true
+          community.general.pacman:
+            name: "{{ packages.diagnostics.native | default([]) }}"
+            state: present
+          when: (packages.diagnostics.native | default([])) | length > 0
+
+        - name: Install AUR Diagnostic Packages
+          kewlfft.aur.aur:
+            name: "{{ packages.diagnostics.aur | default([]) }}"
+            state: present
+          when: (packages.diagnostics.aur | default([])) | length > 0
+
+    # --- Post-install Services ---
+    - name: Enable TeamViewer background service if installed
+      become: true
+      ansible.builtin.systemd:
+        name: teamviewerd
+        enabled: true
+        state: started
+      ignore_errors: true
+      tags: [packages, productivity, services]
