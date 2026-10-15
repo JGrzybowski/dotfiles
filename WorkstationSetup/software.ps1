@@ -1,105 +1,165 @@
-# Communications software
-cinst slack -Y
-choco pin add -n=slack
-cinst skype -Y
-cinst obs-studio -Y
+# ==============================================================================
+# Windows Workstation Software Setup
+# Reads packages and configuration from packages.jsonc
+# Primary installer: WinGet | Secondary fallback: Chocolatey | Direct Executable
+# ==============================================================================
 
-# Git
-cinst git -Y
-cinst git-lfs.install -Y
-cinst gh -Y
+[CmdletBinding(DefaultParameterSetName = "All")]
+param (
+    [Parameter(ParameterSetName = "Category", Mandatory = $false, Position = 0, HelpMessage = "Category name(s) to install (e.g. browsers, communications, audioTools)")]
+    [Alias("Section", "Categories")]
+    [string[]]$Category,
 
-# Terminal customization
-cinst nerd-fonts-cascadiacode -Y
-cinst poshgit -Y 
-cinst oh-my-posh -Y
-cinst jetbrainsmononf -Y
-cinst terminal-icons.powershell -Y
-cinst psake -Y
+    [Parameter(ParameterSetName = "App", Mandatory = $false, HelpMessage = "Specific application name(s) or package ID(s) to install (e.g. 'Zen Browser', 'git', 'peace')")]
+    [Alias("Name", "Package")]
+    [string[]]$App,
 
-# General software development
-cinst logexpert -Y
+    [Parameter(ParameterSetName = "List", Mandatory = $false, HelpMessage = "List all available categories and applications in the catalog")]
+    [switch]$List
+)
 
-# Software for C#/.Net development
-cinst jetbrainstoolbox -Y
-choco pin add -n=jetbrainstoolbox
-cinst azure-cli -Y
-cinst azure-data-studio -Y
-choco pin add -n=azure-data-studio
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
+if (-not $scriptDir) { $scriptDir = $PSScriptRoot }
+. "$scriptDir/PackageHelper.ps1"
 
-# Data analysis/visualization software
-cinst python3 -Y
-cinst r.project -Y
-cinst r.studio -Y
+$configPath = Join-Path $scriptDir "packages.jsonc"
+$catalog = Import-JsoncFile -Path $configPath
 
-# Node.js development
-cinst nodejs -Y
+# ------------------------------------------------------------------------------
+# Mode 1: List all categories & apps
+# ------------------------------------------------------------------------------
+if ($List) {
+    Show-CatalogList -Catalog $catalog
+    return
+}
 
-# Java environment
-cinst openjdk -Y 
+# ------------------------------------------------------------------------------
+# Mode 2: Install specific application(s) by name or ID
+# ------------------------------------------------------------------------------
+if ($App) {
+    Write-Host "==========================================================" -ForegroundColor Magenta
+    Write-Host " Targeted App Installation: $($App -join ', ')" -ForegroundColor Magenta
+    Write-Host "==========================================================" -ForegroundColor Magenta
 
-# Docker and Kubernetes
-cinst kubernetes-cli -Y
-cinst kubernetes-helm -Y
-cinst kustomize -Y
-cinst flux -Y
-cinst Minikube -Y
+    $matched = Find-CatalogPackages -Catalog $catalog -SearchTerms $App
+    if ($matched.Count -eq 0) {
+        Write-Error "No matching applications or modules found for: $($App -join ', ')"
+        return
+    }
 
-# Reading Ebooks editing PDFs
-cinst adobereader -Y
-cinst pdftk -Y
-cinst calibre -Y
-cinst naps2 -Y
+    foreach ($entry in $matched) {
+        if ($entry.Type -eq 'Module') {
+            Install-PSGalleryModule -ModuleName $entry.Name
+        } else {
+            Install-WorkstationPackage -Package $entry.Item
+        }
+    }
+    Write-Host "`nTargeted installation finished!" -ForegroundColor Green
+    return
+}
 
-# 2D graphics editors and viewers
-cinst irfanview --params="'/assoc=1'"  -Y # IrfanView (1 associates with images only)
-cinst irfanviewplugins -Y 
-cinst inkscape -Y
-cinst paint.net -Y
+# ------------------------------------------------------------------------------
+# Mode 3: Install specific category / categories
+# ------------------------------------------------------------------------------
+if ($Category) {
+    Write-Host "==========================================================" -ForegroundColor Magenta
+    Write-Host " Targeted Category Installation: $($Category -join ', ')" -ForegroundColor Magenta
+    Write-Host "==========================================================" -ForegroundColor Magenta
 
-# 3D graphics editors and viewers
-cinst blender -Y
-cinst openscad -Y
+    foreach ($cat in $Category) {
+        $prop = $catalog.PSObject.Properties | Where-Object { $_.Name -ieq $cat }
+        if (-not $prop) {
+            Write-Warning "Category '$cat' not found in catalog. Use -List to see available categories."
+            continue
+        }
 
-# 3D printing
-cinst cura-new -Y
-cinst meshmixer -Y
-cinst prusaslicer -Y
+        if ($prop.Name -eq 'psModules') {
+            Write-Host "`n----------------------------------------------------------" -ForegroundColor DarkCyan
+            Write-Host " Category: PowerShell Modules (PSGallery)" -ForegroundColor DarkCyan
+            Write-Host "----------------------------------------------------------" -ForegroundColor DarkCyan
+            foreach ($mod in $prop.Value) {
+                Install-PSGalleryModule -ModuleName $mod
+            }
+        } else {
+            Install-PackageList -CategoryName $prop.Name -Packages $prop.Value
+        }
+    }
+    Write-Host "`nCategory installation finished!" -ForegroundColor Green
+    return
+}
 
-# Hardware monitoring (temperatures, frequencies, device identification)
-cinst hwinfo -Y
-cinst cpu-z.portable -Y
-cinst gpu-z -Y
+# ------------------------------------------------------------------------------
+# Mode 4: Default - Install Full Workstation Suite
+# ------------------------------------------------------------------------------
+Write-Host "==========================================================" -ForegroundColor Magenta
+Write-Host " Starting Full Workstation Software Installation" -ForegroundColor Magenta
+Write-Host " Catalog: packages.jsonc" -ForegroundColor Magenta
+Write-Host "==========================================================" -ForegroundColor Magenta
 
-# Mainly drive cleaning and usage tools
-cinst wiztree -Y
-cinst crystaldiskinfo -Y
+# 1. Web Browsers
+Install-PackageList -CategoryName "Web Browsers" -Packages $catalog.browsers
 
-cinst teamviewer -Y
+# 2. Communications
+Install-PackageList -CategoryName "Communication Software" -Packages $catalog.communications
 
-# Must have everyday tools
-cinst notepadplusplus.install -Y
-cinst 7zip.install -Y
-cinst keepass.install -Y
-cinst keepass-plugin-keepassnatmsg -Y
-cinst keepass-plugin-keepassotp -Y
+# 3. Developer Editors & Git
+Install-PackageList -CategoryName "Developer Editors, Git & Version Control" -Packages $catalog.devEditorsAndGit
 
-# Audio tools
-cinst eartrumpet -Y
-cinst equalizerapo -Y
+# 4. Terminal Customization & Fonts
+Install-PackageList -CategoryName "Terminal Customization & Fonts" -Packages $catalog.terminalAndFonts
 
-# Peace setup WIP
-Invoke-WebRequest `
-    -Uri "https://sourceforge.net/projects/peace-equalizer-apo-extension/files/PeaceSetup.exe/download" `
-    -OutFile "$PSScriptRoot/temp/PeaceSetup.exe"
-Invoke-Expression "$PSScriptRoot/temp/PeaceSetup.exe"
+# Native PowerShell Modules
+if ($catalog.psModules) {
+    Write-Host "`n----------------------------------------------------------" -ForegroundColor DarkCyan
+    Write-Host " Category: PowerShell Modules (PSGallery)" -ForegroundColor DarkCyan
+    Write-Host "----------------------------------------------------------" -ForegroundColor DarkCyan
+    foreach ($mod in $catalog.psModules) {
+        Install-PSGalleryModule -ModuleName $mod
+    }
+}
 
-# Useful tools but not everyday use ones
-cinst winscp.install -Y
-cinst hashcheck -Y
-cinst winmerge -Y
-cinst doublecmd -Y
-cinst powertoys -Y
+# 5. General Software Development
+Install-PackageList -CategoryName "General Software Development" -Packages $catalog.generalDev
 
-# Video playback codecs and players
-cinst k-litecodecpackfull -Y
+# 6. C# / .NET & Azure Cloud Development
+Install-PackageList -CategoryName "C# / .NET & Azure Cloud Development" -Packages $catalog.dotnetAndCloud
+
+# 7. Data Analysis & Runtimes
+Install-PackageList -CategoryName "Data Analysis & Runtimes" -Packages $catalog.runtimesAndData
+
+# 8. Containers & Kubernetes
+Install-PackageList -CategoryName "Containers & Kubernetes" -Packages $catalog.containersAndK8s
+
+# 9. Media & Gaming
+Install-PackageList -CategoryName "Media & Gaming" -Packages $catalog.mediaAndGaming
+
+# 10. Document Readers, PDF & Ebooks
+Install-PackageList -CategoryName "Document Readers, PDF & Ebooks" -Packages $catalog.documentsAndPdf
+
+# 11. 2D Graphics Editors & Viewers
+Install-PackageList -CategoryName "2D Graphics Editors & Viewers" -Packages $catalog.graphics2D
+
+# 12. 3D Graphics & 3D Printing
+Install-PackageList -CategoryName "3D Graphics & 3D Printing" -Packages $catalog.graphics3DAndPrinting
+
+# 13. Hardware Monitoring & Diagnostics
+Install-PackageList -CategoryName "Hardware Monitoring & Diagnostics" -Packages $catalog.diagnosticsAndHardware
+
+# 14. Disk Utilities & Remote Access
+Install-PackageList -CategoryName "Disk Utilities & Remote Access" -Packages $catalog.diskAndRemote
+
+# 15. Everyday Essential Tools
+Install-PackageList -CategoryName "Everyday Essential Tools" -Packages $catalog.essentialEveryday
+
+# Dedicated Chocolatey Suite (KeePass base + plugins)
+Install-PackageList -CategoryName "KeePass Suite (Chocolatey Dedicated Provider)" -Packages $catalog.keepassSuite
+
+# 16. Audio Tools (EarTrumpet, Equalizer APO, Peace Extension)
+Install-PackageList -CategoryName "Audio Tools" -Packages $catalog.audioTools
+
+# 17. General Utilities & File Management
+Install-PackageList -CategoryName "General Utilities & File Management" -Packages $catalog.generalUtilities
+
+Write-Host "`n==========================================================" -ForegroundColor Green
+Write-Host " Workstation software installation complete!" -ForegroundColor Green
+Write-Host "==========================================================" -ForegroundColor Green

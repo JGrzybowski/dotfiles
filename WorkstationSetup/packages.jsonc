@@ -1,0 +1,160 @@
+{
+  // ==============================================================================
+  // Windows Workstation Package Catalog
+  // Primary installer: WinGet | Secondary fallback: Chocolatey
+  // Set "enabled": false to skip any package during installation.
+  // ==============================================================================
+
+  // 1. Web Browsers
+  "browsers": [
+    { "name": "Google Chrome", "winget": "Google.Chrome", "choco": "googlechrome", "pin": true },
+    { "name": "Zen Browser", "winget": "Zen-Team.Zen-Browser", "choco": "zen-browser", "pin": true }
+  ],
+
+  // 2. Communication Software
+  "communications": [
+    { "name": "Discord", "winget": "Discord.Discord", "choco": "discord", "pin": true },
+    { "name": "Zoom", "winget": "Zoom.Zoom", "choco": "zoom", "pin": true },
+    { "name": "Slack", "winget": "SlackTechnologies.Slack", "choco": "slack", "pin": true },
+    { "name": "Skype", "winget": "Microsoft.Skype", "choco": "skype" },
+    { "name": "OBS Studio", "winget": "OBSProject.OBSStudio", "choco": "obs-studio" }
+  ],
+
+  // 3. Developer Editors, Git & Version Control
+  "devEditorsAndGit": [
+    { "name": "Visual Studio Code", "winget": "Microsoft.VisualStudioCode", "choco": "vscode", "pin": true },
+    { "name": "Git", "winget": "Git.Git", "choco": "git" },
+    { "name": "Git LFS", "winget": "GitHub.GitLFS", "choco": "git-lfs.install" },
+    { "name": "GitHub CLI", "winget": "GitHub.cli", "choco": "gh" }
+  ],
+
+  // 4. Terminal Customization & Fonts
+  "terminalAndFonts": [
+    { "name": "Cascadia Code Nerd Font", "winget": "DEVCOM.CascadiaCodeNF", "choco": "nerd-fonts-cascadiacode" },
+    { "name": "JetBrains Mono Nerd Font", "winget": "DEVCOM.JetBrainsMonoNF", "choco": "jetbrainsmononf" },
+    { "name": "Oh My Posh", "winget": "JanDeDobbeleer.OhMyPosh", "choco": "oh-my-posh" }
+  ],
+
+  // Native PowerShell modules from PSGallery
+  "psModules": [
+    "posh-git",
+    "Terminal-Icons",
+    "psake"
+  ],
+
+  // 5. General Software Development
+  "generalDev": [
+    { "name": "LogExpert", "winget": "LogExpert.LogExpert", "choco": "logexpert" }
+  ],
+
+  // 6. C# / .NET & Azure Cloud Development
+  "dotnetAndCloud": [
+    { "name": "JetBrains Toolbox", "winget": "JetBrains.Toolbox", "choco": "jetbrainstoolbox", "pin": true },
+    { "name": "Azure CLI", "winget": "Microsoft.AzureCLI", "choco": "azure-cli" },
+    { "name": "Azure Data Studio", "winget": "Microsoft.AzureDataStudio", "choco": "azure-data-studio", "pin": true }
+  ],
+
+  // 7. Data Analysis & Runtimes
+  "runtimesAndData": [
+    { "name": "Python 3", "winget": "Python.Python.3.12", "choco": "python3" },
+    { "name": "R Project", "winget": "RProject.R", "choco": "r.project" },
+    { "name": "RStudio", "winget": "Posit.RStudio", "choco": "r.studio" },
+    { "name": "Node.js (LTS)", "winget": "OpenJS.NodeJS.LTS", "choco": "nodejs" },
+    { "name": "OpenJDK Java", "winget": "Microsoft.OpenJDK.21", "choco": "openjdk" }
+  ],
+
+  // 8. Containers & Kubernetes
+  "containersAndK8s": [
+    { "name": "Kubernetes CLI (kubectl)", "winget": "Kubernetes.kubectl", "choco": "kubernetes-cli" },
+    { "name": "Helm", "winget": "Helm.Helm", "choco": "kubernetes-helm" },
+    { "name": "Kustomize", "winget": "Kubernetes.kustomize", "choco": "kustomize" },
+    { "name": "Flux CD CLI", "winget": "FluxCD.flux", "choco": "flux" },
+    { "name": "Minikube", "winget": "Kubernetes.minikube", "choco": "Minikube" }
+  ],
+
+  // 9. Media & Gaming
+  "mediaAndGaming": [
+    { "name": "Spotify", "winget": "Spotify.Spotify", "choco": "spotify", "pin": true },
+    { "name": "Steam", "winget": "Valve.Steam", "choco": "steam", "pin": true },
+    { "name": "K-Lite Codec Pack Full", "winget": "CodecGuide.K-LiteCodecPack.Full", "choco": "k-litecodecpackfull" }
+  ],
+
+  // 10. Document Readers, PDF & Ebooks
+  "documentsAndPdf": [
+    { "name": "Adobe Acrobat Reader", "winget": "Adobe.Acrobat.Reader.64-bit", "choco": "adobereader" },
+    { "name": "PDFtk Server", "winget": "PDFLabs.PDFtkServer", "choco": "pdftk" },
+    { "name": "Calibre", "winget": "calibre.calibre", "choco": "calibre" },
+    { "name": "NAPS2 (Document Scanner)", "winget": "NAPS2.NAPS2", "choco": "naps2" }
+  ],
+
+  // 11. 2D Graphics Editors & Viewers
+  "graphics2D": [
+    {
+      "name": "IrfanView",
+      "winget": "IrfanSkiljan.IrfanView",
+      "choco": "irfanview",
+      "wingetArgs": "--override \"/assoc=1 /silent\"",
+      "chocoArgs": "--params=\"'/assoc=1'\""
+    },
+    { "name": "IrfanView Plugins", "winget": "IrfanSkiljan.IrfanView.Plugins", "choco": "irfanviewplugins" },
+    { "name": "Inkscape", "winget": "Inkscape.Inkscape", "choco": "inkscape" },
+    { "name": "Paint.NET", "winget": "dotPDNLLC.paintdotnet", "choco": "paint.net" }
+  ],
+
+  // 12. 3D Graphics & 3D Printing
+  "graphics3DAndPrinting": [
+    { "name": "Blender", "winget": "BlenderFoundation.Blender", "choco": "blender" },
+    { "name": "OpenSCAD", "winget": "OpenSCAD.OpenSCAD", "choco": "openscad" },
+    { "name": "Ultimaker Cura", "winget": "Ultimaker.Cura", "choco": "cura-new" },
+    { "name": "Meshmixer", "winget": "Autodesk.Meshmixer", "choco": "meshmixer" },
+    { "name": "PrusaSlicer", "winget": "PrusaResearch.PrusaSlicer", "choco": "prusaslicer" }
+  ],
+
+  // 13. Hardware Monitoring & Diagnostics
+  "diagnosticsAndHardware": [
+    { "name": "HWiNFO", "winget": "REALiX.HWiNFO", "choco": "hwinfo" },
+    { "name": "CPU-Z", "winget": "CPUID.CPU-Z", "choco": "cpu-z.portable" },
+    { "name": "GPU-Z", "winget": "TechPowerUp.GPU-Z", "choco": "gpu-z" }
+  ],
+
+  // 14. Disk Utilities & Remote Access
+  "diskAndRemote": [
+    { "name": "WizTree", "winget": "AntibodySoftware.WizTree", "choco": "wiztree" },
+    { "name": "CrystalDiskInfo", "winget": "CrystalDewWorld.CrystalDiskInfo", "choco": "crystaldiskinfo" },
+    { "name": "TeamViewer", "winget": "TeamViewer.TeamViewer", "choco": "teamviewer" }
+  ],
+
+  // 15. Everyday Essential Tools
+  "essentialEveryday": [
+    { "name": "Notepad++", "winget": "Notepad++.Notepad++", "choco": "notepadplusplus.install" },
+    { "name": "7-Zip", "winget": "7zip.7zip", "choco": "7zip.install" }
+  ],
+
+  // Dedicated Chocolatey Suite (KeePass base + plugins kept on same provider)
+  "keepassSuite": [
+    { "name": "KeePass Password Safe", "choco": "keepass.install" },
+    { "name": "KeePass NatMsg Plugin", "choco": "keepass-plugin-keepassnatmsg" },
+    { "name": "KeePass OTP Plugin", "choco": "keepass-plugin-keepassotp" }
+  ],
+
+  // 16. Audio Tools
+  "audioTools": [
+    { "name": "EarTrumpet", "winget": "File-New-Project.EarTrumpet", "choco": "eartrumpet" },
+    { "name": "Equalizer APO", "winget": "EqualizerAPO.EqualizerAPO", "choco": "equalizerapo" },
+    {
+      "name": "Peace Equalizer APO Extension",
+      "url": "https://sourceforge.net/projects/peace-equalizer-apo-extension/files/PeaceSetup.exe/download",
+      "fileName": "PeaceSetup.exe",
+      "sha256": "d007a5efcbe361efbe5ec88eea8eff6191d0188e8c7111354cbb063fbac26f2c"
+    }
+  ],
+
+  // 17. General Utilities & File Management
+  "generalUtilities": [
+    { "name": "WinSCP", "winget": "WinSCP.WinSCP", "choco": "winscp.install" },
+    { "name": "HashCheck", "winget": "Code52.HashCheck", "choco": "hashcheck" },
+    { "name": "WinMerge", "winget": "WinMerge.WinMerge", "choco": "winmerge" },
+    { "name": "Double Commander", "winget": "doublecmd.doublecmd", "choco": "doublecmd" },
+    { "name": "Microsoft PowerToys", "winget": "Microsoft.PowerToys", "choco": "powertoys" }
+  ]
+}
